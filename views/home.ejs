@@ -1,0 +1,33 @@
+<%- include('./partials/metadata'); %>
+  <%- include('./partials/header', {username}) %>
+
+    <main class='container pt-5'>
+      <% for(let i=0; i < store.length; i++) { %>
+        <section class='my-5'>
+          <h5 class='m-3'>
+            <%= store[i].catagory %>
+          </h5>
+          <section class='d-flex flex-wrap gap-3' style='width: 100vm - 3em;'>
+            <% for(let j=0; j < store[i].items.length; j++) { %>
+              <div class="card shadow-md" style="max-width: 16rem;">
+                <img src="<%= store[i].items[j].image %>" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">
+                    <%= store[i].items[j].name %>
+                  </h5>
+                  <b>
+                    <%= store[i].items[j].price %>
+                  </b>
+                  <p class="card-text">
+                    <%= store[i].items[j].description %>
+                  </p>
+                  <a href="#" class="btn btn-primary">Add to cart</a>
+                </div>
+              </div>
+              <% } %>
+          </section>
+        </section>
+        <% } %>
+    </main>
+
+    <%- include('./partials/end'); %>

@@ -1,5 +1,5 @@
 <%- include('./partials/metadata'); %>
-  <%- include('./partials/header', {username}) %>
+  <%- is_admin ? include('./partials/headerAdmin', {username}) : include('./partials/header', {username}) %>
 
     <main class='container pt-5'>
       <% for(let i=0; i < store.length; i++) { %>
@@ -9,19 +9,31 @@
           </h5>
           <section class='d-flex flex-wrap gap-3' style='width: 100vm - 3em;'>
             <% for(let j=0; j < store[i].items.length; j++) { %>
-              <div class="card shadow-md" style="max-width: 16rem;">
-                <img src="<%= store[i].items[j].image %>" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">
-                    <%= store[i].items[j].name %>
-                  </h5>
-                  <b>
-                    <%= store[i].items[j].price %>
-                  </b>
-                  <p class="card-text">
-                    <%= store[i].items[j].description %>
-                  </p>
-                  <a href="#" class="btn btn-primary">Add to cart</a>
+              <div class="card shadow-md" style="max-width: 18rem;">
+                <div class="w-100"
+                  style='height: 10rem; background-image: url("<%= store[i].items[j].image %>"); background-position: center; background-size: cover;'>
+                </div>
+                <div class="card-body d-flex flex-column justify-content-between">
+                  <div>
+                    <h1 class="card-title display-6 fs-4">
+                      <%= store[i].items[j].name %>
+                    </h1>
+                    <h1 class='text-success mb-3 display-6 fs-6'>
+                      <%= store[i].items[j].price %> ৳
+                    </h1>
+                    <p class="text-muted">
+                      <small>
+                        <%= store[i].items[j].description %>
+                      </small>
+                    </p>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <input type="number" class='form-control' style='width:4rem' value='1' min='1'>
+                    <button href="#" class="btn btn-primary w-100" onclick="addToCart(this)"
+                      data-id="<%= store[i].items[j].id %>" data-name="<%= store[i].items[j].name %>"
+                      data-price="<%= store[i].items[j].price %>">Add to Cart
+                    </button>
+                  </div>
                 </div>
               </div>
               <% } %>
@@ -29,5 +41,41 @@
         </section>
         <% } %>
     </main>
+    <div id='toastContainer' class="position-fixed bottom-0 end-0 p-3 d-flex flex-column gap-2" style="z-index: 11">
 
-    <%- include('./partials/end'); %>
+      <script>
+        const addToCart = async (e) => {
+          const id = e.dataset.id
+          const toastId = (new Date()).getTime()
+          const name = e.dataset.name
+          const price = e.dataset.price
+          const quantity = e.parentElement.querySelector("input").value
+
+          document.querySelector("#toastContainer").innerHTML +=
+            `<div id="${toastId}" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="false">
+            <div class="d-flex">
+              <small class="toast-body">
+                You have added <b>${quantity}</b> of <b>${name}</b>
+              </small>
+              <button type="button" class="btn-close btn-close-white  me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+          </div>`
+
+          const toast = new bootstrap.Toast(document.getElementById(toastId));
+          toast.show();
+
+          const response = await fetch('/cart', {
+            method: 'POST',
+            mode: 'cors',
+            credentials: 'same-origin',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
+            body: JSON.stringify({ id, name, price })
+          });
+        }
+      </script>
+
+      <%- include('./partials/end'); %>

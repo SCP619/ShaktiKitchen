@@ -24,6 +24,11 @@ const userSchema = new mongoose.Schema({
     type     : Number,
     required : true,
   },
+  is_admin : {
+    type     : Boolean,
+    default  : false,
+    required : true,
+  },
 })
 
 const user = mongoose.model('user', userSchema)

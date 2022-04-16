@@ -4,5 +4,7 @@ module.exports = [
   require('./signout'),
   require('./signin'),
   require('./registration'),
+  require('./account'),
   require('./cart'),
+  require('./addProduct'),
 ]

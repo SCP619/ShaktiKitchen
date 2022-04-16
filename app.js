@@ -30,8 +30,8 @@ mongoose
     useNewUrlParser    : true,
   })
   .then(() => {
-    app.listen(9000, () => {
-      console.log('Server is running on Port 9000')
+    app.listen(5000, () => {
+      console.log('Server is running on Port 5000')
     })
   })
 

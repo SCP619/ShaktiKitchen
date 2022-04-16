@@ -1,32 +1,27 @@
 const mongoose = require('mongoose')
 
 const cartSchema = new mongoose.Schema({
-  name          : {
-    type     : String,
+  product_id : {
+    type     : mongoose.Types.ObjectId,
     required : true,
   },
-  email         : {
-    type     : String,
-    required : true,
-  },
-  phone         : {
+  quantity   : {
     type     : Number,
+    default  : 1,
     required : true,
   },
-  paymentMethod : {
+  name       : {
     type     : String,
     required : true,
   },
-  product       : {
-    type     : String,
+  price      : {
+    type     : Number,
+    default  : 0,
     required : true,
   },
-  quantity      : {
-    type     : Number,
-    required : true,
-  },
-  price         : {
-    type     : Number,
+  is_checked : {
+    type     : Boolean,
+    default  : false,
     required : true,
   },
 })

@@ -1,6 +1,6 @@
 const router = require('express').Router()
 
-const User = require('../model/user')
+const user = require('../model/user')
 
 router.get('/registration', (req, res) => {
   if (req.session.username) return res.redirect('/')
@@ -11,10 +11,11 @@ router.post('/registration', async (req, res) => {
   if (req.session.username) return res.redirect('/')
 
   const { name, username, email, password, phone } = req.body
+  console.log(name, username, email, password, phone)
 
-  const user = await User.findOne({ username })
+  const userFound = await user.findOne({ username })
 
-  if (user) {
+  if (userFound) {
     res.render('registration', {
       message : 'User with that email already exists',
       type    : 'danger',
@@ -30,14 +31,15 @@ router.post('/registration', async (req, res) => {
         phone,
       }).save()
 
-      return res.redirect('/signin')
-    } catch (err) {
+      res.redirect('/signin')
+    } catch (error) {
+      console.log(error)
       res.render('registration', {
         message : 'Fill all fields',
         type    : 'danger',
       })
-
-      return res.redirect('/registration')
+      res.redirect('/registration')
+      res.redirect('/registration')
     }
   }
 })

@@ -11,7 +11,7 @@ router.get('/cart', async (req, res) => {
   const cart = await Cart.find({ is_checked: false })
 
   res.render('cart', {
-    username : req.session.username,
+    name : req.session.name,
     cart,
   })
 })
@@ -19,16 +19,14 @@ router.get('/cart', async (req, res) => {
 router.post('/cart', async (req, res) => {
   if (!req.session.username) return res.redirect('/signin')
   if (req.session.is_admin) return res.redirect('/home')
-  const { id, name, quantity, price } = req.body
+  const { id, name, price } = req.body
 
   const doesExist = await Cart.exists({ product_id: id, is_checked: false })
 
   if (doesExist) {
-    for (let i = 0; i < quantity; i++)
-      await Cart.findOneAndUpdate({ product_id: id, is_checked: false }, { $inc: { quantity: 1 } })
-
-    } else {
-    const cart = new Cart({ product_id: id, quantity, name, price })
+    await Cart.findOneAndUpdate({ product_id: id, is_checked: false }, { $inc: { quantity: 1 } })
+  } else {
+    const cart = new Cart({ product_id: id, name, price })
 
     await cart.save()
   }
@@ -46,8 +44,8 @@ router.post('/cartClear', async (req, res) => {
   })
 
   return res.render('cart', {
-    username : req.session.username,
-    cart     : await Cart.find({ is_checked: false }),
+    name : req.session.name,
+    cart : await Cart.find({ is_checked: false }),
   })
 })
 
@@ -61,8 +59,8 @@ router.post('/cartConfirm', async (req, res) => {
   })
 
   return res.render('cart', {
-    username : req.session.username,
-    cart     : await Cart.find({ is_checked: false }),
+    name : req.session.name,
+    cart : await Cart.find({ is_checked: false }),
   })
 })
 module.exports = router

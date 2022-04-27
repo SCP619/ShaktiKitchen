@@ -1,41 +1,35 @@
-const { clearCache } = require('ejs')
-const express = require('express')
-const user = require('../model/user')
-
-const router = express.Router()
+const User = require('../model/user')
+const router = require('express')()
 
 router.get('/signin', (req, res) => {
   if (req.session.username) return res.redirect('/')
-  res.render('signin', { username: req.session.username })
+
+  return res.render('signin', { name: req.session.name })
 })
 
 router.post('/signin', async (req, res) => {
   const { username, password } = req.body
 
-  const userFound = await user.findOne({ username })
-  if (!userFound) {
-    res.render('signin', {
+  if (!password || !username) {
+    res.sendStatus(400)
+    return res.render('signin', { name: req.session.name })
+  }
+
+  const user = await User.findOne({ username, password })
+
+  if (!user)
+    return res.render('signin', {
       message : 'Username/Password do not match',
       type    : 'danger',
+      name    : '',
     })
-  } else {
-    user.find({ username }).then(users => {
-      users.forEach(user => {
-        if (username === user.username && password === user.password) {
-          //initiating session
-          req.session.username = user.username
-          req.session.is_admin = user.is_admin
 
-          res.redirect('/')
-        } else {
-          res.render('signin', {
-            message : 'Username/Password do not match',
-            type    : 'danger',
-          })
-        }
-      })
-    })
-  }
+  //initiating session
+  req.session.name = user.name
+  req.session.username = user.username
+  req.session.is_admin = user.is_admin
+
+  return res.redirect('/home')
 })
 
 module.exports = router

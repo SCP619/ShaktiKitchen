@@ -1,11 +1,10 @@
-const router = require('express').Router()
-
-const user = require('../model/user')
+const router = require('express')()
+const User = require('../model/user')
 
 router.get('/registration', (req, res) => {
   if (req.session.username) return res.redirect('/')
 
-  res.render('registration', { username: req.session.username })
+  return res.render('registration', { name: req.session.name })
 })
 router.post('/registration', async (req, res) => {
   if (req.session.username) return res.redirect('/')
@@ -13,34 +12,29 @@ router.post('/registration', async (req, res) => {
   const { name, username, email, password, phone } = req.body
   console.log(name, username, email, password, phone)
 
-  const userFound = await user.findOne({ username })
+  const user = await User.findOne({ username })
 
-  if (userFound) {
-    res.render('registration', {
+  if (!user)
+    return res.render('registration', {
       message : 'User with that email already exists',
       type    : 'danger',
     })
-    res.redirect('/registration')
-  } else {
-    try {
-      await new user({
-        username,
-        name,
-        email,
-        password,
-        phone,
-      }).save()
 
-      res.redirect('/signin')
-    } catch (error) {
-      console.log(error)
-      res.render('registration', {
-        message : 'Fill all fields',
-        type    : 'danger',
-      })
-      res.redirect('/registration')
-      res.redirect('/registration')
-    }
+  try {
+    const newUser = await new User({
+      username,
+      name,
+      email,
+      password,
+      phone,
+    }).save()
+
+    return res.redirect('/signin')
+  } catch (error) {
+    return res.render('registration', {
+      message : 'Fill all fields',
+      type    : 'danger',
+    })
   }
 })
 

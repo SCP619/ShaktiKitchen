@@ -1,5 +1,5 @@
 <%- include('./partials/metadata'); %>
-  <%- include('./partials/header', {username}) %>
+  <%- include('./partials/header', {name}) %>
     <main class='container d-flex justify-content-center align-items-center w-100 h-100 pt-5'>
       <form action='/registration' method="POST" class='container' style='width: 20rem'>
         <% if (locals.type, locals.message) { %>

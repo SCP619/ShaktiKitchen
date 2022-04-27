@@ -1,5 +1,5 @@
 <%- include('./partials/metadata'); %>
-  <%- is_admin ? include('./partials/headerAdmin', {username}) : include('./partials/header', {username}) %>
+  <%- is_admin ? include('./partials/headerAdmin', {name}) : include('./partials/header', {name}) %>
 
     <main class='container pt-5'>
       <% for(let i=0; i < store.length; i++) { %>
@@ -9,25 +9,23 @@
           </h5>
           <section class='d-flex flex-wrap gap-3' style='width: 100vm - 3em;'>
             <% for(let j=0; j < store[i].items.length; j++) { %>
-              <div class="card shadow-md" style="max-width: 18rem;">
+              <div class="card shadow-md" style="max-width: 16rem;">
                 <div class="w-100"
                   style='height: 10rem; background-image: url("<%= store[i].items[j].image %>"); background-position: center; background-size: cover;'>
                 </div>
-                <div class="card-body d-flex flex-column justify-content-between">
-                  <div>
-                    <h1 class="card-title display-6 fs-4">
-                      <%= store[i].items[j].name %>
-                    </h1>
-                    <h1 class='text-success mb-3 display-6 fs-6'>
-                      <%= store[i].items[j].price %> ৳
-                    </h1>
-                    <p class="text-muted">
-                      <small>
-                        <%= store[i].items[j].description %>
-                      </small>
-                    </p>
-                  </div>
-                  <div class="d-flex gap-2">
+                <div class="card-body">
+                  <h1 class="card-title display-6 fs-4">
+                    <%= store[i].items[j].name %>
+                  </h1>
+                  <h1 class='text-success mb-3 display-6 fs-6'>
+                    <%= store[i].items[j].price %> ৳
+                  </h1>
+                  <p class="text-muted">
+                    <small>
+                      <%= store[i].items[j].description %>
+                    </small>
+                  </p>
+                  <div class="d-flex gap-2 ">
                     <input type="number" class='form-control' style='width:4rem' value='1' min='1'>
                     <button href="#" class="btn btn-primary w-100" onclick="addToCart(this)"
                       data-id="<%= store[i].items[j].id %>" data-name="<%= store[i].items[j].name %>"

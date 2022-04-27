@@ -2,9 +2,12 @@
   "name": "shakti-kitchen",
   "version": "1.0.0",
   "description": "",
-  "main": "./app.js",
+  "main": "./index.js",
+  "author": "Shaktiman",
+  "license": "MIT",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon index.js",
+    "test": "jest"
   },
   "dependencies": {
     "ejs": "^3.1.6",
@@ -13,6 +16,8 @@
     "mongodb": "^4.4.1",
     "mongoose": "^6.2.8"
   },
-  "author": "Shaktiman",
-  "license": "MIT"
+  "devDependencies": {
+    "jest": "^28.0.1",
+    "supertest": "^6.2.2"
+  }
 }

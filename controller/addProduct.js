@@ -1,5 +1,4 @@
-const express = require('express')
-const router = express.Router()
+const router = require('express')()
 const Product = require('../model/product')
 
 router.get('/addproduct', async (req, res) => {
@@ -9,8 +8,8 @@ router.get('/addproduct', async (req, res) => {
   const product = await Product.find()
 
   res.render('addproduct', {
-    username : req.session.username,
-    store    : product,
+    name  : req.session.name,
+    store : product,
   })
 })
 
@@ -24,8 +23,8 @@ router.post('/addcatagory', async (req, res) => {
   const product = await Product.find()
 
   res.render('addproduct', {
-    username : req.session.username,
-    store    : product,
+    name  : req.session.name,
+    store : product,
   })
 })
 
@@ -40,8 +39,8 @@ router.post('/addproduct', async (req, res) => {
   const product = await Product.find()
 
   res.render('addproduct', {
-    username : req.session.username,
-    store    : product,
+    name  : req.session.name,
+    store : product,
   })
 })
 

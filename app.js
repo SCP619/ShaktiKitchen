@@ -8,7 +8,7 @@ const app = express()
 
 app.use(
   session({
-    secret            : '3CWF-rrZ3-WRxAQ378',
+    secret            : 'FE#5-GE',
     resave            : true,
     saveUninitialized : true,
   })
@@ -23,18 +23,5 @@ app.set('view engine', 'ejs')
 //Routing
 routes.map(route => app.use(route))
 
-//server start
-mongoose
-  .connect('mongodb://localhost:27017/shaktikitchen', {
-    useUnifiedTopology : true,
-    useNewUrlParser    : true,
-  })
-  .then(() => {
-    app.listen(5000, () => {
-      console.log('Server is running on Port 5000')
-    })
-  })
-
-mongoose.connection.on('open', () => {
-  console.log('Database connected')
-})
+// server start
+module.exports = app

@@ -1,5 +1,5 @@
 <%- include('./partials/metadata'); %>
-  <%- include('./partials/header', {username}) %>
+  <%- include('./partials/header', {name}) %>
 
     <main class='d-flex gap-2 pt-5 mt-5 justify-content-between container'>
       <section class="p-0" style='width: 40rem;'>
@@ -68,7 +68,7 @@
             </div>
             <div class="mb-3">
               <label for="description" class="form-label fs-6">Description</label>
-              <textarea class="form-control" name="description" id="description" rows="3"></textarea>
+              <textarea class="form-control" id="description" rows="3"></textarea>
             </div>
             <input type="submit" class="btn btn-primary float-end" value='Add Product'>
         </div>

@@ -7,11 +7,11 @@ const session = require('express-session')
 const app = express()
 
 app.use(
-  session({
-    secret            : 'FE#5-GE',
-    resave            : true,
-    saveUninitialized : true,
-  })
+    session({
+        secret: 'FE#5-GE',
+        resave: true,
+        saveUninitialized: true,
+    })
 )
 
 app.use(express.static(path.join(__dirname, '/public')))

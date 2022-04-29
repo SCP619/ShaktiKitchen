@@ -4,63 +4,63 @@ const Product = require('../model/product')
 
 let router = express.Router()
 
-router.get('/cart', async (req, res) => {
-  if (!req.session.username) return res.redirect('/signin')
-  if (req.session.is_admin) return res.redirect('/home')
+router.get('/cart', async(req, res) => {
+    if (!req.session.username) return res.redirect('/signin')
+    if (req.session.is_admin) return res.redirect('/home')
 
-  const cart = await Cart.find({ is_checked: false })
+    const cart = await Cart.find({ is_checked: false, created_by: req.session.username })
 
-  res.render('cart', {
-    name : req.session.name,
-    cart,
-  })
+    res.render('cart', {
+        name: req.session.name,
+        cart,
+    })
 })
 
-router.post('/cart', async (req, res) => {
-  if (!req.session.username) return res.redirect('/signin')
-  if (req.session.is_admin) return res.redirect('/home')
-  const { id, name, price } = req.body
+router.post('/cart', async(req, res) => {
+    if (!req.session.username) return res.redirect('/signin')
+    if (req.session.is_admin) return res.redirect('/home')
+    const { id, name, price, quantity = 1 } = req.body
 
-  const doesExist = await Cart.exists({ product_id: id, is_checked: false })
+    const doesExist = await Cart.exists({ product_id: id, is_checked: false, created_by: req.session.username })
 
-  if (doesExist) {
-    await Cart.findOneAndUpdate({ product_id: id, is_checked: false }, { $inc: { quantity: 1 } })
-  } else {
-    const cart = new Cart({ product_id: id, name, price })
+    if (doesExist) {
+        await Cart.findOneAndUpdate({ product_id: id, is_checked: false, created_by: req.session.username }, { $inc: { quantity } })
+    } else {
+        const cart = new Cart({ product_id: id, name, price, quantity, created_by: req.session.username })
 
-    await cart.save()
-  }
+        await cart.save()
+    }
 
-  return true
+    return true
 })
 
-router.post('/cartClear', async (req, res) => {
-  if (!req.session.username) return res.redirect('/signin')
-  if (req.session.is_admin) return res.redirect('/home')
-  const cart = await Cart.find({ is_checked: false })
+router.post('/cartClear', async(req, res) => {
+    if (!req.session.username) return res.redirect('/signin')
+    if (req.session.is_admin) return res.redirect('/home')
+    const cart = await Cart.find({ is_checked: false })
 
-  cart.map(async ({ id }) => {
-    await Cart.findByIdAndRemove(id)
-  })
+    cart.map(async({ id }) => {
+        await Cart.findByIdAndRemove(id)
+    })
 
-  return res.render('cart', {
-    name : req.session.name,
-    cart : await Cart.find({ is_checked: false }),
-  })
+    return res.render('cart', {
+        name: req.session.name,
+        cart: await Cart.find({ is_checked: false }),
+    })
 })
 
-router.post('/cartConfirm', async (req, res) => {
-  if (!req.session.username) return res.redirect('/signin')
-  if (req.session.is_admin) return res.redirect('/home')
-  const cart = await Cart.find({ is_checked: false })
+router.post('/cartConfirm', async(req, res) => {
+    if (!req.session.username) return res.redirect('/signin')
+    if (req.session.is_admin) return res.redirect('/home')
+    const cart = await Cart.find({ is_checked: false })
 
-  cart.map(async ({ id }) => {
-    await Cart.findByIdAndUpdate(id, { $set: { is_checked: true } })
-  })
+    cart.map(async({ id }) => {
+        await Cart.findByIdAndUpdate(id, { $set: { is_checked: true } })
+    })
 
-  return res.render('cart', {
-    name : req.session.name,
-    cart : await Cart.find({ is_checked: false }),
-  })
+    return res.render('cart', {
+        name: req.session.name,
+        cart: await Cart.find({ is_checked: false }),
+    })
 })
 module.exports = router

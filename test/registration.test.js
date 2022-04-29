@@ -33,7 +33,7 @@ describe('POST /registration', () => {
   })
 
   describe('When form data properly filled', () => {
-    test('Should respond with a 200', async () => {
+    test('Should respond with a 200 meaning new user created', async () => {
       await request(app).post('/accountDetails').send({
         username : 'correct_username',
         name     : 'correct_name',

@@ -11,6 +11,7 @@ How to run the app:
     npm start
 
   5. Visit: http://localhost:8080/
+       
        Admin acc: Username: admin
                   Password: admin
   6. To test the app

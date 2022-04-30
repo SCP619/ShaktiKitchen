@@ -4,7 +4,10 @@ const router = require('express')()
 router.get('/signin', (req, res) => {
   if (req.session.username) return res.redirect('/')
 
-  return res.render('signin', { name: req.session.name })
+  return res.render('signin', {
+    name     : req.session.name,
+    is_admin : req.session.is_admin,
+  })
 })
 
 router.post('/signin', async (req, res) => {
@@ -12,16 +15,21 @@ router.post('/signin', async (req, res) => {
 
   if (!password || !username) {
     res.sendStatus(400)
-    return res.render('signin', { name: req.session.name })
+    return res.render('signin', {
+      name     : req.session.name,
+
+      is_admin : req.session.is_admin,
+    })
   }
 
   const user = await User.findOne({ username, password })
 
   if (!user)
     return res.render('signin', {
-      message : 'Username/Password do not match',
-      type    : 'danger',
-      name    : '',
+      message  : 'Username/Password do not match',
+      type     : 'danger',
+      name     : '',
+      is_admin : false,
     })
 
   //initiating session

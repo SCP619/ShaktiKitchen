@@ -8,8 +8,9 @@ router.get('/addproduct', async (req, res) => {
   const product = await Product.find()
 
   res.render('addproduct', {
-    name  : req.session.name,
-    store : product,
+    name     : req.session.name,
+    is_admin : req.session.is_admin,
+    store    : product,
   })
 })
 
@@ -23,8 +24,9 @@ router.post('/addcatagory', async (req, res) => {
   const product = await Product.find()
 
   res.render('addproduct', {
-    name  : req.session.name,
-    store : product,
+    name     : req.session.name,
+    is_admin : req.session.is_admin,
+    store    : product,
   })
 })
 
@@ -39,8 +41,9 @@ router.post('/addproduct', async (req, res) => {
   const product = await Product.find()
 
   res.render('addproduct', {
-    name  : req.session.name,
-    store : product,
+    name     : req.session.name,
+    is_admin : req.session.is_admin,
+    store    : product,
   })
 })
 
